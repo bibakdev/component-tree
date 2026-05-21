@@ -1,14 +1,16 @@
+// src/modules/ui-shell/components/Sidebar.tsx
 'use client';
 
 import CloseSidebarButton from './CloseSidebarButton';
+import SavedTreeList from '@/modules/saved-trees/components/Container/SavedTreeList';
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode; // optional now
 }
 
-export default function Sidebar({ open, onClose, children }: SidebarProps) {
+export default function Sidebar({ open, onClose }: SidebarProps) {
   return (
     <aside
       className={`
@@ -24,7 +26,11 @@ export default function Sidebar({ open, onClose, children }: SidebarProps) {
         </h2>
         <CloseSidebarButton onClick={onClose} />
       </div>
-      <nav className="p-4">{children}</nav>
+      <nav className="p-4">
+        <ul className="space-y-2">
+          <SavedTreeList />
+        </ul>
+      </nav>
     </aside>
   );
 }

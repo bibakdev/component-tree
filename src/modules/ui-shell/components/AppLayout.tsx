@@ -1,3 +1,4 @@
+// src/modules/ui-shell/components/AppLayout.tsx
 'use client';
 
 import { useSidebarStore } from '../store';
@@ -5,6 +6,9 @@ import Sidebar from './Sidebar';
 import MobileSidebarToggle from './MobileSidebarToggle';
 import NodeNameModal from '@/modules/modals/components/Container/NodeNameModal';
 import DeleteNodeModal from '@/modules/modals/components/Container/DeleteNodeModal';
+import SaveModal from '@/modules/saved-trees/components/Container/SaveModal';
+import EditTreeModal from '@/modules/saved-trees/components/Container/EditTreeModal';
+import DeleteTreeModal from '@/modules/saved-trees/components/Container/DeleteTreeModal';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { isOpen, open, close } = useSidebarStore();
@@ -20,10 +24,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Sidebar */}
-      <Sidebar open={isOpen} onClose={close}>
-        {/* SavedTreesList will be inserted here later */}
-        <p className="text-sm text-gray-400 text-center">درخت‌های ذخیره‌شده</p>
-      </Sidebar>
+      <Sidebar open={isOpen} onClose={close} />
 
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
@@ -34,6 +35,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 overflow-auto p-6">{children}</main>
         <NodeNameModal />
         <DeleteNodeModal />
+        <SaveModal />
+        <EditTreeModal />
+        <DeleteTreeModal />
       </div>
     </div>
   );
