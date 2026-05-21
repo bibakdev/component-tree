@@ -4,7 +4,8 @@
 import { useSidebarStore } from '../store';
 import Sidebar from './Sidebar';
 import MobileSidebarToggle from './MobileSidebarToggle';
-import ActionBar from '@/modules/tree-actions/components/ActionBar'; // ← جدید
+import ActionBar from '@/modules/tree-actions/components/ActionBar';
+import StatusBar from '@/shared/components/ui/StatusBar'; // جدید
 import NodeNameModal from '@/modules/modals/components/Container/NodeNameModal';
 import DeleteNodeModal from '@/modules/modals/components/Container/DeleteNodeModal';
 import SaveModal from '@/modules/saved-trees/components/Container/SaveModal';
@@ -23,10 +24,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           onClick={close}
         />
       )}
-
       {/* Sidebar */}
       <Sidebar open={isOpen} onClose={close} />
-
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-4 border-b border-white/10 p-4">
@@ -34,7 +33,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <h1 className="text-xl font-bold">Component Tree Builder</h1>
         </div>
         <main className="flex-1 overflow-auto p-6">
-          <ActionBar /> {/* ← نوار ابزار جدید */}
+          <ActionBar />
           {children}
         </main>
         <NodeNameModal />
@@ -43,6 +42,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <EditTreeModal />
         <DeleteTreeModal />
       </div>
+      <StatusBar /> {/* جدید */}
     </div>
   );
 }

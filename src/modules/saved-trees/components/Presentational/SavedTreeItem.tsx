@@ -1,5 +1,5 @@
 // src/modules/saved-trees/components/Presentational/SavedTreeItem.tsx
-import React from 'react';
+'use client';
 
 interface SavedTreeItemProps {
   name: string;
@@ -8,29 +8,26 @@ interface SavedTreeItemProps {
   onDelete: () => void;
 }
 
-const SavedTreeItem: React.FC<SavedTreeItemProps> = ({
+export default function SavedTreeItem({
   name,
   onSelect,
   onEdit,
   onDelete
-}) => {
+}: SavedTreeItemProps) {
   return (
-    <li className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.08] px-4 py-2.5 backdrop-blur-[5px] transition-all duration-200 hover:-translate-x-1 hover:border-white/30 hover:bg-white/[0.15]">
-      <span
-        onClick={onSelect}
-        className="cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap font-medium text-[#e0e0ff]"
-        title={name}
-      >
-        {name}
-      </span>
-      <div className="flex gap-1">
+    <li
+      onClick={onSelect}
+      className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 cursor-pointer transition border border-white/10"
+    >
+      <span className="truncate text-sm font-medium text-white/80">{name}</span>
+      <div className="flex gap-2">
         <button
           onClick={(e) => {
             e.stopPropagation();
             onEdit();
           }}
-          className="rounded-lg p-1 text-lg text-yellow-400 transition hover:bg-white/20"
-          title="ویرایش نام"
+          className="text-yellow-400 hover:text-yellow-300 text-lg"
+          title="ویرایش"
         >
           ✎
         </button>
@@ -39,14 +36,12 @@ const SavedTreeItem: React.FC<SavedTreeItemProps> = ({
             e.stopPropagation();
             onDelete();
           }}
-          className="rounded-lg p-1 text-lg text-red-400 transition hover:bg-white/20"
-          title="حذف درخت"
+          className="text-red-400 hover:text-red-300 text-lg"
+          title="حذف"
         >
           ✕
         </button>
       </div>
     </li>
   );
-};
-
-export default SavedTreeItem;
+}

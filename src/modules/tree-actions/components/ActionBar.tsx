@@ -6,11 +6,13 @@ import { useHistoryStore } from '@/modules/history/store';
 import { useTreeStore } from '@/modules/tree-core/store';
 import { useSavedTreesModalStore } from '@/modules/saved-trees/stores/useSavedTreesModalStore';
 import { buildTreeText } from '@/modules/tree-view/utils';
+import { useStatusStore } from '@/shared/stores/useStatusStore'; // جدید
 
 export default function ActionBar() {
   const { canUndo, canRedo, undo, redo } = useHistoryStore();
   const root = useTreeStore((state) => state.root);
   const openSaveModal = useSavedTreesModalStore((state) => state.openSaveModal);
+  const showMessage = useStatusStore((state) => state.showMessage);
 
   const handleUndo = () => {
     const snapshot = undo();
@@ -25,15 +27,20 @@ export default function ActionBar() {
   const handleCopy = () => {
     if (!root) return;
     const treeText = buildTreeText(root);
-    navigator.clipboard.writeText(treeText).catch(() => {
-      // fallback for older browsers
-      const textarea = document.createElement('textarea');
-      textarea.value = treeText;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-    });
+    navigator.clipboard
+      .writeText(treeText)
+      .then(() => {
+        showMessage('✅ درخت با موفقیت کپی شد'); // اعلان
+      })
+      .catch(() => {
+        const textarea = document.createElement('textarea');
+        textarea.value = treeText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showMessage('✅ درخت کپی شد'); // اعلان
+      });
   };
 
   return (
