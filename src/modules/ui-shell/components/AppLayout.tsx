@@ -4,6 +4,7 @@
 import { useSidebarStore } from '../store';
 import Sidebar from './Sidebar';
 import MobileSidebarToggle from './MobileSidebarToggle';
+import ActionBar from '@/modules/tree-actions/components/ActionBar'; // ← جدید
 import NodeNameModal from '@/modules/modals/components/Container/NodeNameModal';
 import DeleteNodeModal from '@/modules/modals/components/Container/DeleteNodeModal';
 import SaveModal from '@/modules/saved-trees/components/Container/SaveModal';
@@ -32,7 +33,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <MobileSidebarToggle onClick={open} />
           <h1 className="text-xl font-bold">Component Tree Builder</h1>
         </div>
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-6">
+          <ActionBar /> {/* ← نوار ابزار جدید */}
+          {children}
+        </main>
         <NodeNameModal />
         <DeleteNodeModal />
         <SaveModal />
