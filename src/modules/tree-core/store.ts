@@ -132,7 +132,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
 }));
 
 // Helper: find node by id (used inside store)
-function findNodeById(node: TreeNode, id: number): TreeNode | null {
+export function findNodeById(node: TreeNode, id: number): TreeNode | null {
   if (node.id === id) return node;
   for (const child of node.children) {
     const found = findNodeById(child, id);

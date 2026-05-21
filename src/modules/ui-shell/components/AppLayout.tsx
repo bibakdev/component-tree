@@ -3,6 +3,8 @@
 import { useSidebarStore } from '../store';
 import Sidebar from './Sidebar';
 import MobileSidebarToggle from './MobileSidebarToggle';
+import NodeNameModal from '@/modules/modals/components/Container/NodeNameModal';
+import DeleteNodeModal from '@/modules/modals/components/Container/DeleteNodeModal';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { isOpen, open, close } = useSidebarStore();
@@ -30,6 +32,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <h1 className="text-xl font-bold">Component Tree Builder</h1>
         </div>
         <main className="flex-1 overflow-auto p-6">{children}</main>
+        <NodeNameModal />
+        <DeleteNodeModal />
       </div>
     </div>
   );

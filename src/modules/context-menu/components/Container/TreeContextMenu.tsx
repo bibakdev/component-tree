@@ -1,13 +1,15 @@
+// src/modules/context-menu/components/Container/TreeContextMenu.tsx
 'use client';
 
 import React, { useEffect, useRef } from 'react';
 import { useContextMenuStore } from '../../store';
 import { useTreeStore } from '@/modules/tree-core/store';
 import { findNodeById } from '@/modules/tree-core/services';
+import { useNodeModalStore } from '@/modules/modals/store';
 
 export const TreeContextMenu: React.FC = () => {
   const { isOpen, position, targetNodeId, close } = useContextMenuStore();
-  const { root, addChild, addSibling, deleteNode, editNode } = useTreeStore();
+  const { root } = useTreeStore();
   const menuRef = useRef<HTMLDivElement>(null);
 
   // بستن منو با کلیک خارج از آن
@@ -45,45 +47,36 @@ export const TreeContextMenu: React.FC = () => {
   const targetNode = findNodeById(root, targetNodeId);
   if (!targetNode) return null;
 
-  // --- عملیات موقت با prompt/confirm (تا زمان ساخت ماژول modals) ---
+  // --- عملیات با مودال‌ها ---
 
   const handleAddChild = () => {
     close();
-    const name = prompt('نام فرزند جدید:');
-    if (name && name.trim()) {
-      addChild(targetNodeId, name.trim());
-    }
+    useNodeModalStore.getState().openModal('addChild', targetNodeId, '');
   };
 
   const handleAddSibling = () => {
     close();
-    if (targetNode.id === root.id) {
+    if (targetNode.id === root?.id) {
       alert('ریشه نمی‌تواند هم‌سطح داشته باشد.');
       return;
     }
-    const name = prompt('نام گرهٔ هم‌سطح:');
-    if (name && name.trim()) {
-      addSibling(targetNodeId, name.trim());
-    }
+    useNodeModalStore.getState().openModal('addSibling', targetNodeId, '');
   };
 
   const handleEdit = () => {
     close();
-    const name = prompt('نام جدید:', targetNode.name);
-    if (name && name.trim() && name.trim() !== targetNode.name) {
-      editNode(targetNodeId, name.trim());
-    }
+    useNodeModalStore
+      .getState()
+      .openModal('edit', targetNodeId, targetNode.name);
   };
 
   const handleDelete = () => {
     close();
-    if (targetNode.id === root.id) {
+    if (targetNode.id === root?.id) {
       alert('نمی‌توان ریشه را حذف کرد.');
       return;
     }
-    if (confirm(`آیا از حذف "${targetNode.name}" اطمینان دارید؟`)) {
-      deleteNode(targetNodeId);
-    }
+    useNodeModalStore.getState().openModal('delete', targetNodeId, '');
   };
 
   // محاسبه موقعیت با در نظر گرفتن لبه‌های صفحه
@@ -97,7 +90,7 @@ export const TreeContextMenu: React.FC = () => {
   return (
     <div
       ref={menuRef}
-      className="min-w-[200px] py-2 backdrop-blur-xl bg-black/40 border border-white/20 rounded-2xl shadow-2xl "
+      className="min-w-[200px] py-2 backdrop-blur-xl bg-black/40 border border-white/20 rounded-2xl shadow-2xl"
       style={style}
     >
       <button
