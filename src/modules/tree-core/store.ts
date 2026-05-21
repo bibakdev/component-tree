@@ -78,7 +78,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
   addChild: (parentId, name) => {
     const { root, nextId } = get();
     if (!root) return;
-    const newRoot = structuredClone(root);
+    const newRoot = structuredClone(root); // deep copy
     const parent = findNodeById(newRoot, parentId); // helper needed
     if (!parent) return;
     const child = createNode(name);
@@ -94,7 +94,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
     const { root, nextId } = get();
     if (!root) return;
     if (nodeId === root.id) return; // cannot add sibling to root
-    const newRoot = structuredClone(root);
+    const newRoot = structuredClone(root); // deep copy
     const parent = findParent(newRoot, nodeId);
     if (!parent) return;
     const index = parent.children.findIndex((c) => c.id === nodeId);

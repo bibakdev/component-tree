@@ -6,6 +6,42 @@
   --color-glass-border: rgba(255, 255, 255, 0.15);
 }
 
+@layer utilities {
+  .depth-0 {
+    color: #f9ca24;
+  }
+  .depth-1 {
+    color: #6ab04c;
+  }
+  .depth-2 {
+    color: #22a6b3;
+  }
+  .depth-3 {
+    color: #be2edd;
+  }
+  .depth-4 {
+    color: #f0932b;
+  }
+  .depth-5 {
+    color: #eb4d4b;
+  }
+  .depth-6 {
+    color: #7ed6df;
+  }
+  .depth-7 {
+    color: #f9ca24;
+  }
+  .depth-8 {
+    color: #6ab04c;
+  }
+  .depth-9 {
+    color: #22a6b3;
+  }
+  .depth-10 {
+    color: #be2edd;
+  }
+}
+
 /* ===== Base styles ===== */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
