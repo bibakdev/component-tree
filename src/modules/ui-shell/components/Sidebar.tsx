@@ -19,7 +19,9 @@ export default function Sidebar({ open, onClose, children }: SidebarProps) {
       `}
     >
       <div className="flex items-center justify-between p-4">
-        <h2 className="text-lg font-semibold">📁 درخت‌ها</h2>
+        <h2 className="text-lg font-semibold lg:flex-1 lg:text-center">
+          📁 درخت‌ها
+        </h2>
         <CloseSidebarButton onClick={onClose} />
       </div>
       <nav className="p-4">{children}</nav>

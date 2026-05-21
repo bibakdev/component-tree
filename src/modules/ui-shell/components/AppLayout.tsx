@@ -20,7 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <Sidebar open={isOpen} onClose={close}>
         {/* SavedTreesList will be inserted here later */}
-        <p className="text-sm text-gray-400">درخت‌های ذخیره‌شده</p>
+        <p className="text-sm text-gray-400 text-center">درخت‌های ذخیره‌شده</p>
       </Sidebar>
 
       {/* Main content */}
