@@ -5,12 +5,13 @@ import { useSidebarStore } from '../store';
 import Sidebar from './Sidebar';
 import MobileSidebarToggle from './MobileSidebarToggle';
 import ActionBar from '@/modules/tree-actions/components/ActionBar';
-import StatusBar from '@/shared/components/ui/StatusBar'; // جدید
+import StatusBar from '@/shared/components/ui/StatusBar';
 import NodeNameModal from '@/modules/modals/components/Container/NodeNameModal';
 import DeleteNodeModal from '@/modules/modals/components/Container/DeleteNodeModal';
 import SaveModal from '@/modules/saved-trees/components/Container/SaveModal';
 import EditTreeModal from '@/modules/saved-trees/components/Container/EditTreeModal';
 import DeleteTreeModal from '@/modules/saved-trees/components/Container/DeleteTreeModal';
+import ImportModal from '@/modules/import-export/components/ImportModal';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { isOpen, open, close } = useSidebarStore();
@@ -41,8 +42,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <SaveModal />
         <EditTreeModal />
         <DeleteTreeModal />
+        <ImportModal />
       </div>
-      <StatusBar /> {/* جدید */}
+      <StatusBar />
     </div>
   );
 }

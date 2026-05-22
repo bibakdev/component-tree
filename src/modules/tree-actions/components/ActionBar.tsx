@@ -5,6 +5,7 @@ import Button from '@/shared/components/ui/Button';
 import { useHistoryStore } from '@/modules/history/store';
 import { useTreeStore } from '@/modules/tree-core/store';
 import { useSavedTreesModalStore } from '@/modules/saved-trees/stores/useSavedTreesModalStore';
+import { useImportModalStore } from '@/modules/import-export/store';
 import { buildTreeText } from '@/modules/tree-view/utils';
 import { useStatusStore } from '@/shared/stores/useStatusStore';
 
@@ -12,6 +13,7 @@ export default function ActionBar() {
   const { canUndo, canRedo, undo, redo } = useHistoryStore();
   const root = useTreeStore((state) => state.root);
   const openSaveModal = useSavedTreesModalStore((state) => state.openSaveModal);
+  const openImportModal = useImportModalStore((state) => state.open);
   const showMessage = useStatusStore((state) => state.showMessage);
 
   const handleUndo = () => {
@@ -60,6 +62,9 @@ export default function ActionBar() {
       </Button>
       <Button variant="secondary" onClick={handleCopy}>
         📋 کپی
+      </Button>
+      <Button variant="secondary" onClick={openImportModal}>
+        📥 ایمپورت
       </Button>
     </div>
   );
