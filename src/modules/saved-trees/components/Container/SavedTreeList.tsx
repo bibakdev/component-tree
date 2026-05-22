@@ -1,6 +1,7 @@
 // src/modules/saved-trees/components/Container/SavedTreeList.tsx
 'use client';
 
+import { useEffect } from 'react';
 import { useSavedTreesStore } from '../../stores/useSavedTreesStore';
 import { useSavedTreesModalStore } from '../../stores/useSavedTreesModalStore';
 import { useTreeStore } from '@/modules/tree-core/store';
@@ -8,14 +9,20 @@ import SavedTreeItem from '../Presentational/SavedTreeItem';
 
 export default function SavedTreeList() {
   const trees = useSavedTreesStore((state) => state.trees);
+  const initialize = useSavedTreesStore((state) => state.initialize);
   const getTreeData = useSavedTreesStore((state) => state.getTreeData);
   const openEditModal = useSavedTreesModalStore((state) => state.openEditModal);
   const openDeleteModal = useSavedTreesModalStore(
     (state) => state.openDeleteModal
   );
 
+  // فقط یک بار در کلاینت، داده‌ها را از localStorage بارگذاری کن
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
   const handleLoad = (name: string) => {
-    const root = getTreeData(name); // اینجا مستقیماً TreeNode دریافت می‌کنی
+    const root = getTreeData(name);
     if (root) {
       useTreeStore.getState().setRoot(root);
     }

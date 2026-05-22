@@ -9,8 +9,8 @@ import type { TreeNode } from '@/modules/tree-core/types';
 
 interface SavedTreesState {
   trees: SavedTree[];
-  loadTrees: () => void;
-  saveTree: (name: string) => boolean; // false if duplicate and not overwritten
+  initialize: () => void; // ← اضافه شده
+  saveTree: (name: string) => boolean;
   overwriteTree: (name: string) => void;
   deleteTree: (name: string) => void;
   renameTree: (oldName: string, newName: string) => boolean;
@@ -18,9 +18,10 @@ interface SavedTreesState {
 }
 
 export const useSavedTreesStore = create<SavedTreesState>((set, get) => ({
-  trees: [],
+  trees: [], // مقدار اولیه همیشه خالی (مشترک بین سرور و کلاینت)
 
-  loadTrees: () => {
+  initialize: () => {
+    // فقط در کلاینت اجرا می‌شود (درون useEffect)
     const trees = loadTreesFromStorage();
     set({ trees });
   },
@@ -29,7 +30,6 @@ export const useSavedTreesStore = create<SavedTreesState>((set, get) => ({
     const { trees } = get();
     const existingIndex = trees.findIndex((t) => t.name === name);
     if (existingIndex !== -1) {
-      // duplicate name – caller should ask confirmation and use overwriteTree
       return false;
     }
     const root = useTreeStore.getState().root;
