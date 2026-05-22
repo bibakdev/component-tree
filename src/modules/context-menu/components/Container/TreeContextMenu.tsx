@@ -9,7 +9,7 @@ import { useNodeModalStore } from '@/modules/modals/store';
 
 export const TreeContextMenu: React.FC = () => {
   const { isOpen, position, targetNodeId, close } = useContextMenuStore();
-  const { root } = useTreeStore();
+  const root = useTreeStore((s) => s.root);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // بستن منو با کلیک خارج از آن
@@ -42,7 +42,8 @@ export const TreeContextMenu: React.FC = () => {
     };
   }, [isOpen, close]);
 
-  if (!isOpen || targetNodeId === null) return null;
+  // اگر منو بسته است، یا targetNodeId وجود ندارد، یا root نال است، هیچ چیز رندر نشود
+  if (!isOpen || targetNodeId === null || !root) return null;
 
   const targetNode = findNodeById(root, targetNodeId);
   if (!targetNode) return null;
@@ -56,7 +57,7 @@ export const TreeContextMenu: React.FC = () => {
 
   const handleAddSibling = () => {
     close();
-    if (targetNode.id === root?.id) {
+    if (targetNode.id === root.id) {
       alert('ریشه نمی‌تواند هم‌سطح داشته باشد.');
       return;
     }
@@ -72,7 +73,7 @@ export const TreeContextMenu: React.FC = () => {
 
   const handleDelete = () => {
     close();
-    if (targetNode.id === root?.id) {
+    if (targetNode.id === root.id) {
       alert('نمی‌توان ریشه را حذف کرد.');
       return;
     }

@@ -2,6 +2,7 @@
 'use client';
 
 import { create } from 'zustand';
+import type { TreeNode } from '@/modules/tree-core/types';
 
 const MAX_UNDO = 50;
 
@@ -10,9 +11,9 @@ interface HistoryState {
   redoStack: string[];
   canUndo: boolean;
   canRedo: boolean;
-  pushSnapshot: (root: unknown) => void;
-  undo: (currentRoot: unknown) => unknown | null;
-  redo: (currentRoot: unknown) => unknown | null;
+  pushSnapshot: (root: TreeNode) => void;
+  undo: (currentRoot: TreeNode) => TreeNode | null;
+  redo: (currentRoot: TreeNode) => TreeNode | null;
   clear: () => void;
 }
 
@@ -41,13 +42,12 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
     const { undoStack, redoStack } = get();
     if (undoStack.length === 0) return null;
 
-    // save current state to redo stack before restoring previous
     const currentSnapshot = JSON.stringify(currentRoot);
     const newRedo = [...redoStack, currentSnapshot];
 
     const newUndo = [...undoStack];
     const previousSnapshot = newUndo.pop()!;
-    const previousRoot = JSON.parse(previousSnapshot);
+    const previousRoot = JSON.parse(previousSnapshot) as TreeNode;
 
     set({
       undoStack: newUndo,
@@ -62,13 +62,12 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
     const { undoStack, redoStack } = get();
     if (redoStack.length === 0) return null;
 
-    // save current state to undo stack before restoring next
     const currentSnapshot = JSON.stringify(currentRoot);
     const newUndo = [...undoStack, currentSnapshot];
 
     const newRedo = [...redoStack];
     const nextSnapshot = newRedo.pop()!;
-    const nextRoot = JSON.parse(nextSnapshot);
+    const nextRoot = JSON.parse(nextSnapshot) as TreeNode;
 
     set({
       undoStack: newUndo,
