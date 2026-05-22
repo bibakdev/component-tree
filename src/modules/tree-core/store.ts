@@ -3,13 +3,13 @@
 import { create } from 'zustand';
 import { TreeNode } from './types';
 import { createNode, findParent, getMaxId } from './services';
+import { useHistoryStore } from '@/modules/history/store';
 
 interface TreeState {
   root: TreeNode | null;
   selectedNodeId: number | null;
   nextId: number;
 
-  // Actions
   selectNode: (nodeId: number) => void;
   setRoot: (newRoot: TreeNode) => void;
   addChild: (parentId: number, name: string) => void;
@@ -49,7 +49,6 @@ function buildDefaultTree(): TreeNode {
 
   root.children = [sidebar, chatArea, overlay, portal];
 
-  // Assign unique IDs manually for default tree (since createNode uses 0)
   let idCounter = 1;
   function assignIds(node: TreeNode) {
     node.id = idCounter++;
@@ -78,8 +77,9 @@ export const useTreeStore = create<TreeState>((set, get) => ({
   addChild: (parentId, name) => {
     const { root, nextId } = get();
     if (!root) return;
-    const newRoot = structuredClone(root); // deep copy
-    const parent = findNodeById(newRoot, parentId); // helper needed
+    useHistoryStore.getState().pushSnapshot(root);
+    const newRoot = structuredClone(root);
+    const parent = findNodeById(newRoot, parentId);
     if (!parent) return;
     const child = createNode(name);
     child.id = nextId;
@@ -93,8 +93,9 @@ export const useTreeStore = create<TreeState>((set, get) => ({
   addSibling: (nodeId, name) => {
     const { root, nextId } = get();
     if (!root) return;
-    if (nodeId === root.id) return; // cannot add sibling to root
-    const newRoot = structuredClone(root); // deep copy
+    if (nodeId === root.id) return;
+    useHistoryStore.getState().pushSnapshot(root);
+    const newRoot = structuredClone(root);
     const parent = findParent(newRoot, nodeId);
     if (!parent) return;
     const index = parent.children.findIndex((c) => c.id === nodeId);
@@ -111,27 +112,28 @@ export const useTreeStore = create<TreeState>((set, get) => ({
   deleteNode: (nodeId) => {
     const { root } = get();
     if (!root || nodeId === root.id) return;
+    useHistoryStore.getState().pushSnapshot(root);
     const newRoot = structuredClone(root);
     const parent = findParent(newRoot, nodeId);
     if (!parent) return;
     parent.children = parent.children.filter((c) => c.id !== nodeId);
     set({
       root: newRoot,
-      selectedNodeId: newRoot.id // fallback
+      selectedNodeId: newRoot.id
     });
   },
 
   editNode: (nodeId, newName) => {
     const { root } = get();
     if (!root) return;
+    useHistoryStore.getState().pushSnapshot(root);
     const newRoot = structuredClone(root);
-    const node = findNodeById(newRoot, nodeId); // helper needed
+    const node = findNodeById(newRoot, nodeId);
     if (node) node.name = newName;
     set({ root: newRoot });
   }
 }));
 
-// Helper: find node by id (used inside store)
 export function findNodeById(node: TreeNode, id: number): TreeNode | null {
   if (node.id === id) return node;
   for (const child of node.children) {
@@ -141,6 +143,5 @@ export function findNodeById(node: TreeNode, id: number): TreeNode | null {
   return null;
 }
 
-// Initialize with default tree
 const defaultTree = buildDefaultTree();
 useTreeStore.getState().setRoot(defaultTree);

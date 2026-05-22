@@ -6,7 +6,7 @@ import { useHistoryStore } from '@/modules/history/store';
 import { useTreeStore } from '@/modules/tree-core/store';
 import { useSavedTreesModalStore } from '@/modules/saved-trees/stores/useSavedTreesModalStore';
 import { buildTreeText } from '@/modules/tree-view/utils';
-import { useStatusStore } from '@/shared/stores/useStatusStore'; // جدید
+import { useStatusStore } from '@/shared/stores/useStatusStore';
 
 export default function ActionBar() {
   const { canUndo, canRedo, undo, redo } = useHistoryStore();
@@ -15,12 +15,16 @@ export default function ActionBar() {
   const showMessage = useStatusStore((state) => state.showMessage);
 
   const handleUndo = () => {
-    const snapshot = undo();
+    const currentRoot = useTreeStore.getState().root;
+    if (!currentRoot) return;
+    const snapshot = undo(currentRoot);
     if (snapshot) useTreeStore.getState().setRoot(snapshot);
   };
 
   const handleRedo = () => {
-    const snapshot = redo();
+    const currentRoot = useTreeStore.getState().root;
+    if (!currentRoot) return;
+    const snapshot = redo(currentRoot);
     if (snapshot) useTreeStore.getState().setRoot(snapshot);
   };
 
@@ -30,7 +34,7 @@ export default function ActionBar() {
     navigator.clipboard
       .writeText(treeText)
       .then(() => {
-        showMessage('✅ درخت با موفقیت کپی شد'); // اعلان
+        showMessage('✅ درخت با موفقیت کپی شد');
       })
       .catch(() => {
         const textarea = document.createElement('textarea');
@@ -39,7 +43,7 @@ export default function ActionBar() {
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        showMessage('✅ درخت کپی شد'); // اعلان
+        showMessage('✅ درخت کپی شد');
       });
   };
 
