@@ -47,7 +47,7 @@ Create, edit, delete, save, load, and import component trees with a beautiful da
 ### Installation
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/bibakdev/component-tree
 cd component-tree-app
 npm install
 Run in Development
