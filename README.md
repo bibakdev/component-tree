@@ -1,4 +1,4 @@
-# 🌳 Component Tree Builder (Glass Edition)
+# 🌳 Component Tree Builder 
 
 An interactive, glassmorphism-styled hierarchical tree editor built for the web.  
 Create, edit, delete, save, load, and import component trees with a beautiful dark UI — now fully installable as a PWA for offline use.
